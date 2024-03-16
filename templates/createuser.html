@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="number"],
+        input[type="date"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+            text-align: left;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+         footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            text-align: center;
+        }
+        footer a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        footer a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form action="{{ url_for('create_user') }}" method="POST">
+        <h2>{{ 'Edit User' if edit_mode else 'Create User' }}</h2>
+        <input type="hidden" name="edit_mode" value="{{ '1' if edit_mode else '0' }}">
+        <input type="hidden" name="user_id" value="{{ user[0] if edit_mode else '' }}">
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ user[1] if edit_mode else '' }}" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" value="{{ user[2] if edit_mode else '' }}" required><br>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ user[3] if edit_mode else '' }}" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user[4] if edit_mode else '' }}" required><br>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" value="{{ user[5] if edit_mode else '' }}" required><br>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" value="{{ user[6] if edit_mode else '' }}" required><br><br>
+
+        <button type="submit">{{ 'Update User' if edit_mode else 'Create User' }}</button>
+    </form>
+
+    <footer>
+        <a href="{{ url_for('index') }}" style="background-color: #6c757d;">Back to Home</a>
+    </footer>
+</body>
+</html>

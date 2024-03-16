@@ -3,27 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Data</title>
+    <title>User List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Set background color */
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #007bff; /* Set header background color */
+            padding: 10px;
+            text-align: center;
+            color: #fff; /* Set header text color */
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .action-buttons a, .action-buttons button {
+            padding: 8px 16px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .action-buttons a {
+            background-color: #28a745; /* Set create user button background color */
+            color: #fff; /* Set create user button text color */
+        }
+        .action-buttons button {
+            background-color: #dc3545; /* Set logout button background color */
+            color: #fff; /* Set logout button text color */
+        }
+        .action-buttons a:hover, .action-buttons button:hover {
+            filter: brightness(0.8); /* Add hover effect */
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 0 auto; /* Center align table */
+            background-color: #fff; /* Set table background color */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Add shadow to table */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff; /* Set header background color */
+            color: #fff; /* Set header text color */
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Set even row background color */
+        }
+        tr:hover {
+            background-color: #e2e6ea; /* Set hover row background color */
+        }
+        footer {
+            text-align: center; /* Center align content */
+            margin-top: 20px; /* Add space from the table */
+        }
+        footer a {
+            display: inline-block; /* Make the link a block element */
+            padding: 10px 20px; /* Add padding to the link */
+            background-color: #007bff; /* Set background color */
+            color: #fff; /* Set text color */
+            text-decoration: none; /* Remove underline */
+            border-radius: 5px; /* Add border radius */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+        footer a:hover {
+            background-color: #0056b3; /* Darker background color on hover */
+        }
+    </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <style>
+        /* Your existing CSS styles */
+    </style>
 </head>
 <body>
-    <h1>User Data</h1>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Age</th>
-            <th>Date of Birth</th>
-        </tr>
-        {% for user in users %}
-        <tr>
-            <td>{{ user[0] }}</td>
-            <td>{{ user[1] }}</td>
-            <td>{{ user[2] }}</td>
-            <td>{{ user[3] }}</td>
-            <td>{{ user[4] }}</td>
-        </tr>
-        {% endfor %}
+    <div class="header">
+        <h2>Users List</h2>
+        <div class="action-buttons">
+            <a href="{{ url_for('create_user') }}">Create User</a>
+            <form action="{{ url_for('login') }}" method="post">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Date of Birth</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user[0] }}</td>
+                <td>{{ user[3] }}</td>
+                <td>{{ user[4] }}</td>
+                <td>{{ user[5] }}</td>
+                <td>{{ user[6] }}</td>
+                <td class="action-buttons">
+                    {% if 'username' in session %}
+                        <!-- Edit button with user details as query parameters -->
+                        <a href="{{ url_for('create_user', edit_mode=True, id=user[0], username=user[1], email=user[2], age=user[3], dob=user[4]) }}">Update User</a>
+                        <form action="{{ url_for('delete_user', id=user[0]) }}" method="post">
+                            <button type="submit">Delete User</button>
+                        </form>
+                    {% else %}
+                        <!-- Optionally, you can show a message or redirect to login page -->
+                        <span>Please login to perform actions.</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+    <footer>
+        <a href="{{ url_for('index') }}">Back to Home</a>
+    </footer>
 </body>
 </html>
+
