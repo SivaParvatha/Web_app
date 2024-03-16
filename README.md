@@ -10,19 +10,19 @@ Clone the repository or download the source code.
 Install the required dependencies by running pip install -r requirements.txt.
 Run the Flask application by executing python app.py.
 Features
-1. User Registration :
+1. **User Registration :**
 Users can register by providing a username, password, name, email, age, and date of birth. The application ensures that usernames are unique.
 
-2. User Login
+2. **User Login :**
 Registered users can log in using their username and password.
 
-3. User Profile Management
+3. **User Profile Management :**
 Logged-in users can edit their profile details, including username, password, name, email, age, and date of birth.
 
-4. User Deletion
+4. **User Deletion :**
 Users have the option to delete their account, which permanently removes their data from the system.
 
-5. Forgot Password
+5. **Forgot Password :**
 A feature for resetting passwords is provided, although it is not implemented in the current version.
 
 Routes
