@@ -10,7 +10,7 @@ Clone the repository or download the source code.
 Install the required dependencies by running pip install -r requirements.txt.
 Run the Flask application by executing python app.py.
 Features
-1. User Registration
+1. User Registration :
 Users can register by providing a username, password, name, email, age, and date of birth. The application ensures that usernames are unique.
 
 2. User Login
