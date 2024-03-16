@@ -67,7 +67,7 @@ def home():
 def create_user():
     if request.method == 'POST':
         if 'edit_mode' in request.form:
-            # Handle updating existing user
+            # This is an edit request, handle updating user details
             user_id = request.form['user_id']
             username = request.form['username']
             password = request.form['password']
@@ -76,8 +76,8 @@ def create_user():
             age = request.form['age']
             dob = request.form['dob']
 
+            # Update user data in the database
             try:
-                # Update user data in the database
                 c.execute("""
                     UPDATE users 
                     SET username = ?, password = ?, name = ?, email = ?, age = ?, dob = ?
@@ -87,11 +87,11 @@ def create_user():
                 flash('User details updated successfully!', 'success')
                 return redirect(url_for('users'))  # Redirect to users list after successful update
             except sqlite3.Error as e:
-                conn.rollback()  # Rollback any changes in case of error
                 flash(f'Error updating user details: {e}', 'error')
                 return redirect(url_for('create_user'))
+
         else:
-            # Handle creating new user
+            # This is a new user creation request
             username = request.form['username']
             password = request.form['password']
             name = request.form['name']
@@ -99,8 +99,8 @@ def create_user():
             age = request.form['age']
             dob = request.form['dob']
 
+            # Insert user data into the database
             try:
-                # Insert user data into the database
                 c.execute("""
                     INSERT INTO users (username, password, name, email, age, dob)
                     VALUES (?, ?, ?, ?, ?, ?)
@@ -111,14 +111,19 @@ def create_user():
             except sqlite3.IntegrityError:
                 flash('Username already exists, please choose another one', 'error')
                 return redirect(url_for('create_user'))
-            except sqlite3.Error as e:
-                conn.rollback()  # Rollback any changes in case of error
-                flash(f'Error creating user: {e}', 'error')
-                return redirect(url_for('create_user'))
     else:
-        # Render the create user form
-        return render_template('createuser.html')
-
+        # Check if it's an edit request and get the user details
+        if 'edit_mode' in request.args:
+            user_id = request.args.get('id')
+            c.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+            user = c.fetchone()
+            if user:
+                return render_template('createuser.html', user=user, edit_mode=True)
+            else:
+                flash("User not found.", "error")
+                return redirect(url_for('users'))
+        else:
+            return render_template('createuser.html')
 
 # Forgot password route
 @app.route('/forgot_password', methods=['GET', 'POST'])
