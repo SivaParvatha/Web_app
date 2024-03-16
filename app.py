@@ -62,11 +62,13 @@ def users():
 def home():
     return render_template('home.html')
 
+
 # Create user route
 @app.route('/create_user', methods=['GET', 'POST'])
 def create_user():
     if request.method == 'POST':
-        if 'edit_mode' in request.form:
+        is_edit = bool(int(request.form.get('edit_mode', 0)))
+        if is_edit:
             # This is an edit request, handle updating user details
             user_id = request.form['user_id']
             username = request.form['username']
@@ -107,10 +109,17 @@ def create_user():
                 """, (username, password, name, email, age, dob))
                 conn.commit()
                 flash('User created successfully!', 'success')
-                return redirect(url_for('login'))  # Redirect to login page after successful user creation
+
+                # Determine the source page and redirect accordingly
+                if request.referrer.endswith('/login'):
+                    return redirect(url_for('login'))
+                else:
+                    return redirect(url_for('users'))  # Redirect to users list after successful user creation
+
             except sqlite3.IntegrityError:
                 flash('Username already exists, please choose another one', 'error')
                 return redirect(url_for('create_user'))
+
     else:
         # Check if it's an edit request and get the user details
         if 'edit_mode' in request.args:
@@ -124,6 +133,7 @@ def create_user():
                 return redirect(url_for('users'))
         else:
             return render_template('createuser.html')
+
 
 # Forgot password route
 @app.route('/forgot_password', methods=['GET', 'POST'])
